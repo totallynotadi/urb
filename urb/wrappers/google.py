@@ -3,6 +3,7 @@ just a sneazy wrapper around the Free Dictionary API from https://dictionaryapi.
 allows defining searching for a definition for a word
 """
 
+from typing import List
 import requests
 
 FD_ENTRIES_URL = 'https://api.dictionaryapi.dev/api/v2/entries/en/'
@@ -40,6 +41,11 @@ class GoogleDefinition():
         self.origin = data.pop('origin', None)
         self.meanings = [DefinitionMeaning(**meaning) for meaning in data.pop('meanings', [])]
 
+    def __repr__(self):
+        return f"<GoogleDefinition {self.word!r}>"
+    def __str__(self):
+        return str(self.word)
+
 def _get_google_json(url: str) -> dict:
     try:
         data = requests.get(url).json()
@@ -57,7 +63,15 @@ def _parse_google_json(data):
         results.append(GoogleDefinition(**_definition))
     return results
 
-def define(term):
+def define(term) -> List[GoogleDefinition]:
+    '''
+    returns definition for a word
+
+    parameters:
+        term: str
+
+    e.g. urban.define('hello')
+    '''
     data = _get_google_json(FD_ENTRIES_URL + term)
     return _parse_google_json(data)
 

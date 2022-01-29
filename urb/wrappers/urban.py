@@ -1,14 +1,26 @@
 """
-yet anotehr wrapper around teh Urban Dictionary API
+yet anotehr wrapper around the Urban Dictionary API
 provides methods to get results for queried words as well as random words
 """
 
+from typing import List
 import requests
 
 UD_DEFINE_URL = 'https://api.urbandictionary.com/v0/define?term='
 UD_RANDOM_URL = 'https://api.urbandictionary.com/v0/random'
 
 class UrbanDefinition():
+
+    __slot__ = (
+        'word',
+        'definition',
+        'example',
+        'author',
+        'thumbs_up',
+        'thumbs_down',
+        'id'
+    )
+
     def __init__(self, **data) -> None:
         self.word = data.pop('word', None)
         self.definition = data.pop('definition', None)
@@ -17,6 +29,12 @@ class UrbanDefinition():
         self.thumbs_up = data.pop('thumbs_up', None)
         self.thumbs_down  = data.pop('thumbs_down', None)
         self.id = data.pop('defid', None)
+
+    def __repr__(self):
+        return f"<UrbanDefinition {self.word!r} - {self.id!r}>"
+
+    def __str__(self):
+        return str(self.word)
 
 def _get_urban_json(url: str) -> dict:
     return requests.get(url).json()
@@ -33,11 +51,22 @@ def _parse_urban_json(json_response):
         results.append(UrbanDefinition(**definition))
     return results
 
-def define(term):
+def define(term) -> List[UrbanDefinition]:
+    '''
+    returns definitions for a word
+
+    parameters:
+        term: str
+
+    e.g. urban.define('hello')
+    '''
     json_response = _get_urban_json(UD_DEFINE_URL + term)
     return _parse_urban_json(json_response)
 
-def random():
+def random() -> List[UrbanDefinition]:
+    '''
+    returns definitions of 10 random words
+    '''
     json_response = _get_urban_json(UD_RANDOM_URL)
     return _parse_urban_json(json_response)
 

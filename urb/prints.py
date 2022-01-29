@@ -1,41 +1,42 @@
-from typing import List
+'''
+this module contains printing functions for definitions form various sources
+each source (like google and urban dictionary) needs to have it's own printing format
+due to the vriations in the information
+'''
+
 import os
+from typing import List
 
 import pyfiglet
-from sklearn.manifold import trustworthiness
 
-from .google import GoogleDefinition
-from .urban import UrbanDefinition
+from wrappers import google, urban
 
 
-def print_urb(definition: UrbanDefinition):
+def print_urb(definition: urban.UrbanDefinition):
+    '''
+    the printing function for Urban Dictionary definitions
+    prameter is a UrbanDefinition object returned from the API wrapper
+    '''
     print(pyfiglet.figlet_format(definition.word, font='cybermedium'))
 
     def format_def(_def):
         if any([str(i) in _def.strip()[:3] for i in range(10)]):
             _def = '• ' + _def.strip()[3:]
         return _def
-
     def format_eg(_eg):
-        # print(_eg.strip())
         _eg = _eg.strip()
         truth = [str(i) in _eg.strip()[:3] for i in range(10)]
         if any(truth):
             truth_index = _eg.index(str(truth.index(True)))
-            # print(truth_index)
             while _eg[truth_index] != ' ':
                 truth_index += 1
-            # print(truth_index)
             _eg = _eg[truth_index:].strip()
-        # print(_eg)
         return _eg
 
     print(
         '\n'.join(
             list(
-                map(
-                    format_def, definition.definition.split('\n')
-                )
+                map(format_def, definition.definition.split('\n'))
             )
         )
     )
@@ -47,9 +48,7 @@ def print_urb(definition: UrbanDefinition):
     print('\nexample ─\n')
     print(
         '\n'.join(
-            map(
-                format_eg, lines
-            )
+            map(format_eg, lines)
         )
     )
     # print(f"\nexample - \n\n{definition.example}")
@@ -60,9 +59,13 @@ def print_urb(definition: UrbanDefinition):
         print(f"\nauthor - {definition.author} :)")
 
 
-def print_goog(definition: GoogleDefinition, index: int = 0):
+def print_goog(definition: google.GoogleDefinition, index: int = 0):
+    '''
+    the printing formatter for definitions from the google dictionary api
+    parameter is a GoogleDefinition object returned fromt the API wrapper
+    '''
     print(pyfiglet.figlet_format(definition.word, font='cybermedium').strip(), '\n')
-    
+
     if definition.phonetic is not None:
         print(definition.phonetic)
 
