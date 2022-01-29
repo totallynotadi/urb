@@ -9,7 +9,7 @@ from typing import List
 
 import pyfiglet
 
-from wrappers import google, urban
+from .wrappers import google, urban
 
 
 def print_urb(definition: urban.UrbanDefinition):
@@ -54,7 +54,7 @@ def print_urb(definition: urban.UrbanDefinition):
     # print(f"\nexample - \n\n{definition.example}")
 
     try:
-        print(f"\nauthor - {definition.author} | 👍 {definition.thumbs_up} | 👎 {definition.thumbs_down}")
+        print(f"\nauthor - {definition.author} | 👍 {definition.thumbs_up} | 👎 {definition.thumbs_down} :)")
     except AttributeError:
         print(f"\nauthor - {definition.author} :)")
 
