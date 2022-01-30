@@ -1,5 +1,5 @@
 
-from .wrappers import (
+from urb.wrappers import (
     google,
     urban
 )

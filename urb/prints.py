@@ -9,7 +9,7 @@ from typing import List
 
 import pyfiglet
 
-from .wrappers import google, urban
+from urb.wrappers import google, urban
 
 
 def print_urb(definition: urban.UrbanDefinition):
