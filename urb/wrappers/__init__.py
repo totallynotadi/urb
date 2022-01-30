@@ -1,2 +1,1 @@
-from . import google
-from . import urban
+from . import google, urban

@@ -7,7 +7,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="urb",
-    version="0.1.2",
+    version="0.1.3",
     description="a command line dictionary and wrapper for various dictionary APIs",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -23,7 +23,7 @@ setup(
         "Operating System :: Microsoft :: Windows :: Windows 10",
         "Operating System :: POSIX :: Linux",
     ],
-    packages=["urb"],
+    packages=["urb", "wrappers"],
     include_package_data=True,
     install_requires=["pyfiglet", "requests", "click"],
     entry_points={

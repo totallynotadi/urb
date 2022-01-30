@@ -5,7 +5,6 @@ due to the vriations in the information
 '''
 
 import os
-from typing import List
 
 import pyfiglet
 
