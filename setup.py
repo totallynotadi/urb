@@ -1,5 +1,5 @@
 import pathlib
-from setuptools import setup
+from setuptools import setup, find_packages
 
 HERE = pathlib.Path(__file__).parent
 
@@ -23,7 +23,7 @@ setup(
         "Operating System :: Microsoft :: Windows :: Windows 10",
         "Operating System :: POSIX :: Linux",
     ],
-    packages=["urb", "wrappers"],
+    packages=find_packages(),
     include_package_data=True,
     install_requires=["pyfiglet", "requests", "click"],
     entry_points={

@@ -5,10 +5,14 @@ due to the vriations in the information
 '''
 
 import os
+from collections import namedtuple
 
 import pyfiglet
+import typer
 
-from urb.wrappers import google, urban
+from .wrappers import google, urban
+
+CONSOLE_WIDTH = os.get_terminal_size().columns
 
 
 def print_urb(definition: urban.UrbanDefinition):
@@ -22,6 +26,7 @@ def print_urb(definition: urban.UrbanDefinition):
         if any([str(i) in _def.strip()[:3] for i in range(10)]):
             _def = '• ' + _def.strip()[3:]
         return _def
+
     def format_eg(_eg):
         _eg = _eg.strip()
         truth = [str(i) in _eg.strip()[:3] for i in range(10)]
@@ -53,7 +58,8 @@ def print_urb(definition: urban.UrbanDefinition):
     # print(f"\nexample - \n\n{definition.example}")
 
     try:
-        print(f"\nauthor - {definition.author} | 👍 {definition.thumbs_up} | 👎 {definition.thumbs_down} :)")
+        print(
+            f"\nauthor - {definition.author} | 👍 {definition.thumbs_up} | 👎 {definition.thumbs_down} :)")
     except AttributeError:
         print(f"\nauthor - {definition.author} :)")
 
@@ -66,10 +72,12 @@ def print_goog(definition: google.GoogleDefinition, index: int = 0):
     print(pyfiglet.figlet_format(definition.word, font='cybermedium').strip(), '\n')
 
     if definition.phonetic is not None:
-        print(definition.phonetic)
+        print(definition.phonetic, '\n')
+    else:
+        print('\n')
 
     if definition.origin is not None:
-        print(f"\norigin - \n{definition.origin}\n")
+        print(f"origin - \n{definition.origin}\n")
 
     if index > len(definition.meanings):
         index = 0
@@ -78,7 +86,26 @@ def print_goog(definition: google.GoogleDefinition, index: int = 0):
         definition.meanings = [definition.meanings[:index - 1][-1]]
     for meaning in definition.meanings:
         print(meaning.part_of_speech)
-        print((len(meaning.definition) + int((os.get_terminal_size().columns - len(meaning.definition)) / 2)) * "─")
+        print((len(meaning.definition) +
+              int((os.get_terminal_size().columns - len(meaning.definition)) / 2)) * "─")
         print(meaning.definition)
         if meaning.example is not None:
             print(meaning.example, "\n")
+
+
+def print_wotd(wotd: namedtuple):
+    print(pyfiglet.figlet_format(wotd.word, font='cybermedium').strip())
+
+    if wotd.type != 'not available':
+        print('\n', wotd.type)
+    print(((len(wotd.meaning) % os.get_terminal_size().columns) + ((os.get_terminal_size().columns - (len(wotd.meaning) % os.get_terminal_size().column)) // 2)) * "─")
+    print(wotd.meaning, '\n')
+    print(f'word of the day on {wotd.date} :)')
+
+
+def print_quote(quote: namedtuple):
+    quote_length = len(quote.quote)
+    print('\n')
+    print(quote.quote.strip())
+    print(((quote_length % CONSOLE_WIDTH) + ((CONSOLE_WIDTH - (quote_length % CONSOLE_WIDTH)) // 2)) * "-")
+    print(f'By {quote.author}')

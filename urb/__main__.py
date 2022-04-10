@@ -1,63 +1,110 @@
-"""
-the cli logic managing all the commands, arguments and options
+import requests
+import typer
 
-currently implemented commands are
+from . import prints
+from .wrappers import quote as _quote
+from .wrappers import wotd as _wotd
+from .wrappers import google as _google
+from .wrappers import spell_check, urban
 
-define
-    usage -
-        urb define <search_term>
-        e.g. urb define hello
+# TODO - use typer.echo
+# TODO - minimal output
+# TODO - integrate oxford
+# TODO - word of the day
+# TODO - quotes???
 
-    args -
-        --google, -g
-        uses the google dictionary API instead of urban dictionary
-        e.g. urb define --google hello
-            urb define -g hello
-
-        --index, -i
-        APIs teend to provide multiple definitions for a word at time.
-        this option lets specify what definition is to be displayed
-        e.g. urb define -i 2 noob
-             urb define --index boon
-"""
-
-import click
-
-from urb.wrappers import google, urban
-from urb import prints
+urb = typer.Typer(help="the dankest CLI dictionary", add_completion=False)
 
 
-@click.group()
-@click.option('--index', '-i', 'index', type=bool, is_flag=True,help='specific definition to display')
-@click.option('--google', '-g', 'goog', type=bool, is_flag=True, help='use google search instead.')
-def urb(goog, index): #pylint: disable=unused-argument
-    # the group definition.
-    # empty cuz idk what i can do with it
-    pass
-
-@urb.command("define")
-@click.option('--google', '-g', 'goog', type=bool, default=False, is_flag=True)
-@click.option('--index', '-i', 'index', type=int, default=0, required=False)
-@click.argument("word")
-def define(word, goog, index):
+@urb.command()
+def define(
+    word: str = typer.Argument(..., metavar='word'),
+    google: bool = typer.Option(False, help='get definitions from google  '),
+    index: int = typer.Option(
+        0, metavar='', help="the nth result to display of multiple")
+):
     '''
-    the define command.
-    usage and options specified at the beginning of the file
+    search up definition a word
     '''
     try:
-        if goog:
-            definition = google.define(word)
+        if google:
+            definition = _google.define(word)
             prints.print_goog(definition[0], index)
         else:
             definition = urban.define(word)
             prints.print_urb(definition[:index + 1][-1])
-    except ConnectionError:
-        print('please connect to the internet :)')
+    except requests.exceptions.ConnectionError:
+        print('\nplease connect to the internet :)')
     except IndexError:
-        print('\nno definitions found for this word :(')
+        print(f'no definitions found for {word} :(')
+        correction = spell_check.correct(word)
+        if correction is not None:
+            correction_flag = input(
+                f"btw, did you mean  \033[92m{correction}\033[0m? (y/n) ")
+            if correction_flag == 'y':
+                if google:
+                    definition = _google.define(correction)
+                    prints.print_goog(definition[0], index)
+                else:
+                    definition = urban.define(correction)
+                    prints.print_urb(definition[:index + 1][-1])
+            else:
+                print("\nok, see ya later ^_^")
+
+
+@urb.command()
+def random():
+    '''
+    define a random word
+    '''
+    try:
+        definitions = urban.random()
+        prints.print_urb(definitions[random.randint(0, 9)])
+    except requests.exceptions.ConnectionError:
+        print('\nplease connect to the internet :3')
+
+
+@urb.command()
+def spell(word: str):
+    '''
+    check the spelling of a word
+
+    displays the corrected spelling if wrong
+    '''
+    try:
+        correction = spell_check.correct(word)
+        if correction is not None:
+            print('\nthe correct spelling is' +
+                  f' \033[92m{correction}\033[0m ' + ':3')
+        else:
+            print("\nthe spelling is correct >_<")
+    except requests.exceptions.ConnectionError:
+        print('\nplease connect to the internet :3')
+
+
+@urb.command()
+def wotd(index: int = typer.Option(0, metavar='', help='the nth result to display of multiple')):
+    '''
+    check out the word of the day
+    '''
+    try:
+        wotd = _wotd.get_wotd()[:index+1][-1]
+        prints.print_wotd(wotd)
+    except requests.exceptions.ConnectionError:
+        print('\nplease connect to the internet :3')
+
+
+@urb.command()
+def quote():
+    '''
+    one quote a day keeps the therapist aways :)
+    '''
+    try:
+        quote = _quote.get_rand_quote()
+        prints.print_quote(quote)
+    except requests.exceptions.ConnectionError:
+        print('\nplease connect to the internet :3')
+
 
 def main():
-    urb(obj={})
-
-if __name__ == "__main__":
-    main()
+    urb()
