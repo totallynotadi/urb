@@ -1,3 +1,6 @@
+import random as _random
+from cv2 import FlannBasedMatcher
+
 import requests
 import typer
 
@@ -7,11 +10,11 @@ from .wrappers import wotd as _wotd
 from .wrappers import google as _google
 from .wrappers import spell_check, urban
 
-# TODO - use typer.echo
+# - TODO - use typer.echo
 # TODO - minimal output
 # TODO - integrate oxford
-# TODO - word of the day
-# TODO - quotes???
+# - TODO - word of the day
+# - TODO - quotes???
 
 urb = typer.Typer(help="the dankest CLI dictionary", add_completion=False)
 
@@ -19,9 +22,8 @@ urb = typer.Typer(help="the dankest CLI dictionary", add_completion=False)
 @urb.command()
 def define(
     word: str = typer.Argument(..., metavar='word'),
-    google: bool = typer.Option(False, help='get definitions from google  '),
-    index: int = typer.Option(
-        0, metavar='', help="the nth result to display of multiple")
+    google: bool = typer.Option(False, '--google', '-g', help='get definitions from google  '),
+    index: int = typer.Option(0, '--index', '-i', metavar='', help="the nth result to display of multiple")
 ):
     '''
     search up definition a word
@@ -59,13 +61,13 @@ def random():
     '''
     try:
         definitions = urban.random()
-        prints.print_urb(definitions[random.randint(0, 9)])
+        prints.print_urb(definitions[_random.randint(0, 9)])
     except requests.exceptions.ConnectionError:
         print('\nplease connect to the internet :3')
 
 
 @urb.command()
-def spell(word: str):
+def spell(word: str = typer.Argument(..., metavar='word')):
     '''
     check the spelling of a word
 
@@ -83,7 +85,7 @@ def spell(word: str):
 
 
 @urb.command()
-def wotd(index: int = typer.Option(0, metavar='', help='the nth result to display of multiple')):
+def wotd(index: int = typer.Option(0, '--index', '-i', metavar='', help='the nth result to display of multiple')):
     '''
     check out the word of the day
     '''

@@ -98,7 +98,7 @@ def print_wotd(wotd: namedtuple):
 
     if wotd.type != 'not available':
         print('\n', wotd.type)
-    print(((len(wotd.meaning) % os.get_terminal_size().columns) + ((os.get_terminal_size().columns - (len(wotd.meaning) % os.get_terminal_size().column)) // 2)) * "─")
+    print(((len(wotd.meaning) % os.get_terminal_size().columns) + ((os.get_terminal_size().columns - (len(wotd.meaning) % os.get_terminal_size().columns)) // 2)) * "─")
     print(wotd.meaning, '\n')
     print(f'word of the day on {wotd.date} :)')
 
@@ -108,4 +108,5 @@ def print_quote(quote: namedtuple):
     print('\n')
     print(quote.quote.strip())
     print(((quote_length % CONSOLE_WIDTH) + ((CONSOLE_WIDTH - (quote_length % CONSOLE_WIDTH)) // 2)) * "-")
+    print('\n')
     print(f'By {quote.author}')
