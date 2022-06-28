@@ -1,5 +1,4 @@
 import random as _random
-from cv2 import FlannBasedMatcher
 
 import requests
 import typer
