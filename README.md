@@ -12,60 +12,50 @@ The CLI offers a lot of fun amusing commands to fulfill your vocabulary needs fr
 
 # commands
 
-- ## define
+## define
 
-  ---
+Pulls up the definition for a word. the word to be searched is given as an argument to this command. Urb searches words on urban dicitonary by default
 
-  Pulls up the definition for a word. the word to be searched is given as an argument to this command. Urb searches words on urban dicitonary by default
+    urb define hello
 
-      urb define hello
-
-  - fetch search results from Google dictionary instead \
+- fetch search results from Google dictionary instead \
 
         urb define -g hello
         
         urb define --google hello
 
-  - Specify the result to display out of multiple definitions fetched from the resources. There can be multiple definitions for a single word, use this option to choose which definition gets displayed. This option takes a number as an argument.
+- Specify the result to display out of multiple definitions fetched from the resources. There can be multiple definitions for a single word, use this option to choose which definition gets displayed. This option takes a number as an argument.
 
         urb define -i 3 hello
 
         urb define --index 3 hello
 
-- ## random
+## random
 
-  ---
+Get's the definition of a random word. This commands takes no arguments and has no options.
 
-    Get's the definition of a random word. This commands takes no arguments and has no options.
+    urb random
 
-      urb random
+## spell
 
-- ## spell
+use this commands to verify if a spelling is correct. urb offers corrections is a spelling is wrong. This commands takes a word as an argument and has no options.
 
-  ---
+    urb spell convinience
 
-    use this commands to verify if a spelling is correct. urb offers corrections is a spelling is wrong. This commands takes a word as an argument and has no options.
+## wotd
 
-      urb spell convinience
+Get a word of the day.
 
-- ## wotd
+    urb wotd
 
-  ---
-
-    Get a word of the day.
-
-      urb wotd
-
-  - Specify the result to display out of multiple definitions fetched from the resource. There can be multiple multiple words of the day, use this option to choose which definition gets displayed. This option takes a number as an argument.
+- Specify the result to display out of multiple definitions fetched from the resource. There can be multiple multiple words of the day, use this option to choose which definition gets displayed. This option takes a number as an argument.
 
         urb wotd -i 3
 
         urb wotd --index 3
 
-- ## quote
+## quote
 
-  ---
+fetch a random quote
 
-      urb quote
-
-    fetch a random quote
+    urb quote
