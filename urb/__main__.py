@@ -9,11 +9,9 @@ from .wrappers import wotd as _wotd
 from .wrappers import google as _google
 from .wrappers import spell_check, urban
 
-# - TODO - use typer.echo
+
 # TODO - minimal output
-# TODO - integrate oxford
-# - TODO - word of the day
-# - TODO - quotes???
+# TODO - trans
 
 urb = typer.Typer(help="the dankest CLI dictionary", add_completion=False)
 
