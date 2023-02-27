@@ -7,7 +7,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="urb",
-    version="1.2.1",
+    version="1.2.3",
     description="a command line dictionary and wrapper for various dictionary APIs",
     long_description=README,
     long_description_content_type="text/markdown",

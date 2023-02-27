@@ -9,7 +9,6 @@ from .wrappers import wotd as _wotd
 from .wrappers import google as _google
 from .wrappers import spell_check, urban
 
-
 # TODO - minimal output
 # TODO - trans
 
@@ -19,8 +18,10 @@ urb = typer.Typer(help="the dankest CLI dictionary", add_completion=False)
 @urb.command()
 def define(
     word: str = typer.Argument(..., metavar='word'),
-    google: bool = typer.Option(False, '--google', '-g', help='get definitions from google  '),
-    index: int = typer.Option(0, '--index', '-i', metavar='', help="the nth result to display of multiple")
+    google: bool = typer.Option(
+        False, '--google', '-g', help='get definitions from google  '),
+    index: int = typer.Option(
+        0, '--index', '-i', metavar='', help="the nth result to display of multiple")
 ):
     '''
     search up definition a word
@@ -107,3 +108,7 @@ def quote():
 
 def main():
     urb()
+
+
+if __name__ == '__main__':
+    main()
